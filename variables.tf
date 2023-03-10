@@ -7,6 +7,6 @@ variable "region" {
 variable "my_instance_type" {
   type        = string
   description = "The EC2 instance type"
-  default     = "t3.micro"
+  default     = "t2.micro"
 
 }
