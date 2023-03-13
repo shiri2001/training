@@ -31,14 +31,14 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "tls_private_key" "my_key" {
+resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-resource "aws_key_pair" "my_key" {
-  key_name   = "my_key.pem"
-  public_key = tls_private_key.my_key.public_key_openssh
+resource "aws_key_pair" "ssh_key" {
+  key_name   = "ssh_key.pem"
+  public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
 resource "aws_security_group" "allow_tls" {
@@ -64,7 +64,7 @@ resource "aws_security_group" "allow_tls" {
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.my_instance_type
-  key_name               = aws_key_pair.my_key.key_name
+  key_name               = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
 
   tags = {
