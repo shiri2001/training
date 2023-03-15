@@ -35,24 +35,6 @@ data "aws_vpc" "default" {
   default = true
 }
 
-data "aws_route_table" "default_route_table" {
-  vpc_id = data.aws_vpc.default.id
-  filter {
-    name   = "association.main"
-    values = ["true"]
-  }
-}
-
-resource "aws_default_route_table" "default_route_table" {
-  default_route_table_id = data.aws_route_table.default_route_table.route_table_id
-
-  route {
-    cidr_block = data.aws_vpc.default.cidr_block
-    gateway_id = data.aws_route_table.default_route_table.gateway_id
-  }
-
-}
-
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -75,11 +57,9 @@ resource "aws_security_group" "vpc_security_group" {
     cidr_blocks = ["172.31.0.0/16"]
   }
 }
-resource "aws_subnet" "public_subnet" {
-  vpc_id                  = data.aws_vpc.default.id
-  cidr_block              = "172.31.0.0/20"
-  map_public_ip_on_launch = true
 
+resource "aws_default_subnet" "public_subnet" {
+  availability_zone = "us-east-1b"
 }
 
 resource "aws_subnet" "private_subnet" {
@@ -106,7 +86,7 @@ resource "aws_instance" "bastion" {
   key_name                    = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids      = [aws_security_group.vpc_security_group.id]
   associate_public_ip_address = true
-  subnet_id                   = aws_subnet.public_subnet.id
+  subnet_id                   = aws_default_subnet.public_subnet.id
 }
 
 resource "aws_instance" "vm" {
