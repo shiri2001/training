@@ -31,6 +31,28 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_route_table" "default_route_table" {
+  vpc_id = data.aws_vpc.default.id
+  filter {
+    name   = "association.main"
+    values = ["true"]
+  }
+}
+
+resource "aws_default_route_table" "default_route_table" {
+  default_route_table_id = data.aws_route_table.default_route_table.route_table_id
+
+  route {
+    cidr_block = data.aws_vpc.default.cidr_block
+    gateway_id = data.aws_route_table.default_route_table.gateway_id
+  }
+
+}
+
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -41,33 +63,58 @@ resource "aws_key_pair" "ssh_key" {
   public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
-#  resource "aws_security_group" "allow_tls" {
-#    name        = "allow_tls"
-#    description = "Allow TLS inbound traffic"
-#
-#    ingress {
-#      description = "TLS from VPC"
-#      from_port   = 22
-#      to_port     = 22
-#      protocol    = "tcp"
-#      cidr_blocks = ["0.0.0.0/0"]
-#    }
+resource "aws_security_group" "vpc_security_group" {
+  name        = "vpc_security_group"
+  description = "Allow TLS inbound traffic"
 
-#    egress {
-#      from_port   = 0
-#      to_port     = 0
-#      protocol    = "-1"
-#      cidr_blocks = ["0.0.0.0/0"]
-#    }
-#  }
-
-resource "aws_instance" "vm" {
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.my_instance_type
-  key_name               = aws_key_pair.ssh_key.key_name
-  vpc_security_group_ids = [aws_security_group.allow_tls.id]
-
-  tags = {
-    Name = "HelloWorld"
+  ingress {
+    description = "TLS from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["172.31.0.0/16"]
   }
 }
+resource "aws_subnet" "public_subnet" {
+  vpc_id                  = data.aws_vpc.default.id
+  cidr_block              = "172.31.0.0/20"
+  map_public_ip_on_launch = true
+
+}
+
+resource "aws_subnet" "private_subnet" {
+  vpc_id                  = data.aws_vpc.default.id
+  cidr_block              = "172.31.96.0/20"
+  map_public_ip_on_launch = false
+
+}
+
+resource "aws_route_table" "private_route_table" {
+  vpc_id = data.aws_vpc.default.id
+
+  route = []
+}
+
+resource "aws_route_table_association" "private_route_table_association" {
+  subnet_id      = aws_subnet.private_subnet.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
+resource "aws_instance" "bastion" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.my_instance_type
+  key_name                    = aws_key_pair.ssh_key.key_name
+  vpc_security_group_ids      = [aws_security_group.vpc_security_group.id]
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.public_subnet.id
+}
+
+resource "aws_instance" "vm" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = var.my_instance_type
+  key_name                    = aws_key_pair.ssh_key.key_name
+  vpc_security_group_ids      = [aws_security_group.vpc_security_group.id]
+  associate_public_ip_address = false
+  subnet_id                   = aws_subnet.private_subnet.id
+}
+
