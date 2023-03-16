@@ -35,6 +35,13 @@ data "aws_vpc" "default" {
   default = true
 }
 
+data "aws_route_table" "public_route_table" {
+  filter {
+    name = "association.main"
+    values = ["true"]
+  }
+}
+
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -69,10 +76,20 @@ resource "aws_subnet" "private_subnet" {
 
 }
 
+resource "aws_route" "personal_ip_route" {
+  route_table_id            = data.aws_route_table.public_route_table.id
+  destination_cidr_block    = "my ip"
+  vpc_peering_connection_id = data.aws_route_table.public_route_table.vpc_peering_connection_id
+  depends_on                = [aws_route_table.public_route_table]
+}
+
 resource "aws_route_table" "private_route_table" {
   vpc_id = data.aws_vpc.default.id
 
-  route = []
+  route = {
+    cidr_block = aws_subnet.private_subnet.cidr_block
+    gateway_id = data.aws_route_table.public_route_table.gateway_id
+  }
 }
 
 resource "aws_route_table_association" "private_route_table_association" {
