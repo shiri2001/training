@@ -9,3 +9,7 @@ variable "my_instance_type" {
   description = "The EC2 instance type"
   default     = "t2.micro"
 }
+
+variable "input_ip" {
+  type = string
+}
