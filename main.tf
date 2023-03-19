@@ -37,8 +37,15 @@ data "aws_vpc" "default" {
 
 data "aws_route_table" "public_route_table" {
   filter {
-    name = "association.main"
+    name   = "association.main"
     values = ["true"]
+  }
+}
+
+data "aws_internet_gateway" "default" {
+  filter {
+    name   = "attachment.vpc-id"
+    values = [data.aws_vpc.default.id]
   }
 }
 
@@ -61,7 +68,7 @@ resource "aws_security_group" "vpc_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16"]
+    cidr_blocks = ["172.31.0.0/16", var.input_ip]
   }
 }
 
@@ -76,20 +83,9 @@ resource "aws_subnet" "private_subnet" {
 
 }
 
-resource "aws_route" "personal_ip_route" {
-  route_table_id            = data.aws_route_table.public_route_table.id
-  destination_cidr_block    = "my ip"
-  vpc_peering_connection_id = data.aws_route_table.public_route_table.vpc_peering_connection_id
-  depends_on                = [aws_route_table.public_route_table]
-}
-
 resource "aws_route_table" "private_route_table" {
   vpc_id = data.aws_vpc.default.id
 
-  route = {
-    cidr_block = aws_subnet.private_subnet.cidr_block
-    gateway_id = data.aws_route_table.public_route_table.gateway_id
-  }
 }
 
 resource "aws_route_table_association" "private_route_table_association" {
@@ -113,5 +109,12 @@ resource "aws_instance" "vm" {
   vpc_security_group_ids      = [aws_security_group.vpc_security_group.id]
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.private_subnet.id
+}
+
+resource "aws_route" "personal_ip_route" {
+  route_table_id         = data.aws_route_table.public_route_table.id
+  destination_cidr_block = var.input_ip
+  gateway_id             = data.aws_internet_gateway.default.id
+  depends_on             = [data.aws_route_table.public_route_table]
 }
 
