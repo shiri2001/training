@@ -88,6 +88,11 @@ resource "aws_route_table" "private_route_table" {
 
 }
 
+resource "aws_route_table_association" "public_route_table_association" {
+  subnet_id      = aws_default_subnet.public_subnet.id
+  route_table_id = data.aws_route_table.public_route_table.id
+}
+
 resource "aws_route_table_association" "private_route_table_association" {
   subnet_id      = aws_subnet.private_subnet.id
   route_table_id = aws_route_table.private_route_table.id
@@ -111,9 +116,9 @@ resource "aws_instance" "vm" {
   subnet_id                   = aws_subnet.private_subnet.id
 }
 
-resource "aws_route" "personal_ip_route" {
+resource "aws_route" "gateway_route" {
   route_table_id         = data.aws_route_table.public_route_table.id
-  destination_cidr_block = var.input_ip
+  destination_cidr_block = "0.0.0.0/0"
   gateway_id             = data.aws_internet_gateway.default.id
   depends_on             = [data.aws_route_table.public_route_table]
 }
