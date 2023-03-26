@@ -13,3 +13,7 @@ variable "my_instance_type" {
 variable "input_ip" {
   type = string
 }
+
+variable "input_ip_2" {
+  type = string
+}
