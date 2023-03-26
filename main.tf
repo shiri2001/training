@@ -68,7 +68,14 @@ resource "aws_security_group" "vpc_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16", var.input_ip]
+    cidr_blocks = ["172.31.0.0/16", var.input_ip,var.input_ip_2]
+  }
+    egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 }
 
@@ -82,6 +89,21 @@ resource "aws_subnet" "private_subnet" {
   map_public_ip_on_launch = false
 
 }
+
+resource "aws_security_group" "vm_sg" {
+  name        = "vm_sg"
+  description = "Allow TLS inbound traffic"
+
+  ingress {
+    description = "TLS from bastion"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_subnet.private_subnet.cidr_block}"]
+    self        = true
+  }
+}
+
 
 resource "aws_route_table" "private_route_table" {
   vpc_id = data.aws_vpc.default.id
@@ -111,7 +133,7 @@ resource "aws_instance" "vm" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.my_instance_type
   key_name                    = aws_key_pair.ssh_key.key_name
-  vpc_security_group_ids      = [aws_security_group.vpc_security_group.id]
+  vpc_security_group_ids      = [aws_security_group.vm_sg.id]
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.private_subnet.id
 }
@@ -123,3 +145,11 @@ resource "aws_route" "gateway_route" {
   depends_on             = [data.aws_route_table.public_route_table]
 }
 
+resource "aws_security_group_rule" "bastion_rule" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["${aws_instance.bastion.public_ip}/32"]
+  security_group_id = aws_security_group.vpc_security_group.id
+}
