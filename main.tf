@@ -68,9 +68,9 @@ resource "aws_security_group" "vpc_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16", var.input_ip,var.input_ip_2]
+    cidr_blocks = ["172.31.0.0/16", var.input_ip]
   }
-    egress {
+  egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
@@ -80,7 +80,7 @@ resource "aws_security_group" "vpc_security_group" {
 }
 
 resource "aws_default_subnet" "public_subnet" {
-  availability_zone = "us-east-1b"
+  availability_zone = var.az
 }
 
 resource "aws_subnet" "private_subnet" {
@@ -136,6 +136,7 @@ resource "aws_instance" "vm" {
   vpc_security_group_ids      = [aws_security_group.vm_sg.id]
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.private_subnet.id
+  user_data                   = file("mount.sh")
 }
 
 resource "aws_route" "gateway_route" {
@@ -152,4 +153,17 @@ resource "aws_security_group_rule" "bastion_rule" {
   protocol          = "tcp"
   cidr_blocks       = ["${aws_instance.bastion.public_ip}/32"]
   security_group_id = aws_security_group.vpc_security_group.id
+}
+
+resource "aws_ebs_volume" "vm_vol" {
+  count             = var.add_disk ? 1 : 0
+  availability_zone = aws_instance.vm.availability_zone 
+  size              = 5
+}
+
+resource "aws_volume_attachment" "ebs_attach_to_vm" {
+  count       = var.add_disk ? 1 : 0
+  device_name = "/dev/sdh"
+  volume_id   = length(aws_ebs_volume.vm_vol) > 0 ? aws_ebs_volume.vm_vol[0].id : ""
+  instance_id = aws_instance.vm.id
 }

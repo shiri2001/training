@@ -4,6 +4,13 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "az" {
+  type        = string
+  description = "the aws availability zone"
+  default     = "us-east-1b"
+
+}
+
 variable "my_instance_type" {
   type        = string
   description = "The EC2 instance type"
@@ -14,6 +21,7 @@ variable "input_ip" {
   type = string
 }
 
-variable "input_ip_2" {
-  type = string
+variable "add_disk" {
+  type    = bool
+  default = false
 }
