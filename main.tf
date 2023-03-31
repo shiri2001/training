@@ -167,3 +167,4 @@ resource "aws_volume_attachment" "ebs_attach_to_vm" {
   volume_id   = length(aws_ebs_volume.vm_vol) > 0 ? aws_ebs_volume.vm_vol[0].id : ""
   instance_id = aws_instance.vm.id
 }
+
