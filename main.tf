@@ -90,8 +90,8 @@ resource "aws_subnet" "private_subnet" {
 
 }
 
-resource "aws_security_group" "vm_sg" {
-  name        = "vm_sg"
+resource "aws_security_group" "private_security_group" {
+  name        = "private_security_group"
   description = "Allow TLS inbound traffic"
 
   ingress {
@@ -133,7 +133,7 @@ resource "aws_instance" "vm" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.my_instance_type
   key_name                    = aws_key_pair.ssh_key.key_name
-  vpc_security_group_ids      = [aws_security_group.vm_sg.id]
+  vpc_security_group_ids      = [aws_security_group.private_security_group.id]
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.private_subnet.id
   user_data                   = file("mount.sh")
