@@ -1,17 +1,20 @@
-<mxfile host="app.diagrams.net" modified="2023-04-04T09:12:46.723Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" etag="mob6ti9z1OSQB6Cqo75c" version="21.1.4" type="github">
+<mxfile host="app.diagrams.net" modified="2023-04-04T09:17:58.670Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36" etag="t_tS0dP9CPvABJPJXCdR" version="21.1.4" type="github">
   <diagram name="Page-1" id="Rm839fkE5ZxYmNeSKomE">
     <mxGraphModel dx="880" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-29" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="260" y="170" width="580" height="310" as="geometry" />
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-54" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="40" y="170" width="770" height="310" as="geometry" />
         </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-4" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-29">
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-29" value="" style="group" vertex="1" connectable="0" parent="fHcHpFUS_9CkOEehDBIQ-54">
+          <mxGeometry x="190" width="580" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-4" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-29">
           <mxGeometry x="36.27" width="543.73" height="310" as="geometry" />
         </mxCell>
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-11" value="VPC" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-29">
-          <mxGeometry x="274.02985074626866" y="7.94871794871795" width="48.35820895522388" height="23.846153846153847" as="geometry" />
+          <mxGeometry x="311.60985074626865" y="19.99871794871795" width="48.35820895522388" height="23.846153846153847" as="geometry" />
         </mxCell>
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-19" value="" style="group" vertex="1" connectable="0" parent="fHcHpFUS_9CkOEehDBIQ-29">
           <mxGeometry x="369.99776119402986" y="50.00076923076922" width="175.79820895522383" height="172.88333333333335" as="geometry" />
@@ -58,10 +61,13 @@
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-15" value="Public Subnet" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-20">
           <mxGeometry x="45.73" width="84.34" height="23.85" as="geometry" />
         </mxCell>
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-50" value="SSH key" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-20">
+          <mxGeometry x="-32.326417910447745" y="45.70923076923083" width="60" height="30" as="geometry" />
+        </mxCell>
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-22" value="" style="group" vertex="1" connectable="0" parent="fHcHpFUS_9CkOEehDBIQ-29">
           <mxGeometry y="87.43589743589743" width="72.53731343283582" height="69.55128205128206" as="geometry" />
         </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-12" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-22">
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-12" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#d0cee2;strokeColor=#56517e;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-22">
           <mxGeometry width="69.30288461538463" height="69.30288461538463" as="geometry" />
         </mxCell>
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-21" value="Default Gateaway" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-22">
@@ -70,7 +76,7 @@
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-25" value="" style="group" vertex="1" connectable="0" parent="fHcHpFUS_9CkOEehDBIQ-29">
           <mxGeometry x="425.2792537313432" y="238.46153846153845" width="65.23522388059706" height="47.69230769230769" as="geometry" />
         </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-23" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-25">
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-23" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-25">
           <mxGeometry width="65.23522388059702" height="47.69230769230769" as="geometry" />
         </mxCell>
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-24" value="EBS volume" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-25">
@@ -88,23 +94,20 @@
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-52" value="SSH key" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-29">
           <mxGeometry x="305.78999999999996" y="107.21000000000004" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-32" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="70" y="270" width="80" height="70" as="geometry" />
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-32" value="" style="group" vertex="1" connectable="0" parent="fHcHpFUS_9CkOEehDBIQ-54">
+          <mxGeometry y="100" width="80" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-28" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-32">
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-28" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-32">
           <mxGeometry width="80" height="70" as="geometry" />
         </mxCell>
         <mxCell id="fHcHpFUS_9CkOEehDBIQ-30" value="endpoint user" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-32">
           <mxGeometry x="5.7142857142857135" y="17.5" width="68.57142857142857" height="35" as="geometry" />
         </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fHcHpFUS_9CkOEehDBIQ-28" target="fHcHpFUS_9CkOEehDBIQ-12">
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="fHcHpFUS_9CkOEehDBIQ-54" source="fHcHpFUS_9CkOEehDBIQ-28" target="fHcHpFUS_9CkOEehDBIQ-12">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-41" value="SSH key" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="180" y="260" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="fHcHpFUS_9CkOEehDBIQ-50" value="SSH key" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="351.4" y="261.73" width="60" height="30" as="geometry" />
+        <mxCell id="fHcHpFUS_9CkOEehDBIQ-41" value="SSH key" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="fHcHpFUS_9CkOEehDBIQ-54">
+          <mxGeometry x="110" y="90" width="60" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
