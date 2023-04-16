@@ -41,7 +41,7 @@ jobs:
           shell: bash
           run: |
             terraform init
-            terraform plan -var input_ip ${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ vars.TERRAFORM_WORKING_DIR }}/tfplanoutput/tf.plan
+            terraform plan -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ vars.TERRAFORM_WORKING_DIR }}/tfplanoutput/tf.plan
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
@@ -87,7 +87,7 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}     
       - name: Terraform Apply
         run: |
-          terraform apply -var input_ip ${{ secrets.INPUT_IP }} -var add_disk=true
+          terraform apply -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true
 
       - name: Manual Terraform Apply Approval
         uses: trstringer/manual-approval@v1.9.0
