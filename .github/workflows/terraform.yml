@@ -69,6 +69,22 @@ jobs:
         working-directory: ${{ vars.TERRAFORM_WORKING_DIR }}
     
     steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          cli_config_credentials_hostname: app.terraform.io
+          terraform_version: latest
+          terraform_wrapper: true
+
+      - name: Configure AWS Credentials For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}     
       - name: Terraform Apply
         run: |
             terraform apply
