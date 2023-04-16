@@ -9,5 +9,5 @@ output "private_key" {
 }
 
 output "volume_id" {
-  value     = length(aws_ebs_volume.vm_vol) > 0 ? aws_ebs_volume.vm_vol[0].id : ""
+  value = length(aws_ebs_volume.vm_vol) > 0 ? aws_ebs_volume.vm_vol[0].id : ""
 }

@@ -136,7 +136,9 @@ resource "aws_instance" "vm" {
   vpc_security_group_ids      = [aws_security_group.private_security_group.id]
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.private_subnet.id
-  user_data                   = file("mount.sh")
+  user_data                   = <<-EOF
+   /bin/bash ./mount.sh /apps/volume/new-vol 
+   EOF
 }
 
 resource "aws_route" "gateway_route" {
@@ -157,7 +159,7 @@ resource "aws_security_group_rule" "bastion_rule" {
 
 resource "aws_ebs_volume" "vm_vol" {
   count             = var.add_disk ? 1 : 0
-  availability_zone = aws_instance.vm.availability_zone 
+  availability_zone = aws_instance.vm.availability_zone
   size              = 5
 }
 

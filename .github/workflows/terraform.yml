@@ -1,0 +1,85 @@
+name: Terraform-and-test
+run-name: run by ${{ github.actor }}
+on:
+    push:
+      branches:
+        - main
+        - create_github_actions
+jobs:
+  plan:
+    name: 'Run Terraform Plan'
+    runs-on: ubuntu-22.04
+    
+    defaults:
+      run:
+        working-directory: ${{ vars.TERRAFORM_WORKING_DIR }}
+
+    steps:
+        - name: 'Checkout'
+          uses: actions/checkout@v2
+
+        - name: HashiCorp - Setup Terraform
+          uses: hashicorp/setup-terraform@v2.0.3
+          with:
+            cli_config_credentials_hostname: app.terraform.io
+            terraform_version: latest
+            terraform_wrapper: true
+
+        - name: Configure AWS Credentials For GitHub Actions
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ vars.AWS_REGION }}
+
+        - name: Create Artifact Folder 
+          shell: bash
+          run: |
+            sudo mkdir -p -m777 ${{ github.workspace }}/tfplanoutput
+
+        - name: Terraform Init and Plan
+          shell: bash
+          run: |
+            terraform init
+            terraform plan -out=${{ github.workspace }}/tfplanoutput/tf.plan
+
+        - name: Manual Terraform Plan Approval
+          uses: trstringer/manual-approval@v1.9.0
+          with:
+            secret: ${{ github.TOKEN }}
+            approvers: ${{ github.actor }}
+            minimum-approvals: 1
+            issue-title: "Approve terraform plan."
+            issue-body: "Please approve or deny the terraform plan."
+            exclude-workflow-initiator-as-approver: false
+
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: artifact
+            path: ${{ github.workspace }}/tfplanoutput/
+            if-no-files-found: error
+  apply:
+    name: 'Run Terraform Apply'
+    needs: plan
+    runs-on: ubuntu-22.04
+    
+    defaults:
+      run:
+        working-directory: ${{ vars.TERRAFORM_WORKING_DIR }}
+    
+    steps:
+      - name: Terraform Apply
+        run: |
+            terraform apply
+
+      - name: Manual Terraform Apply Approval
+        uses: trstringer/manual-approval@v1.9.0
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          issue-title: "Approve terraform apply."
+          issue-body: "Please approve or deny applying terraform."
+          exclude-workflow-initiator-as-approver: false
+          
