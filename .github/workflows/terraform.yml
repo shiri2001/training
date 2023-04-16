@@ -43,7 +43,7 @@ jobs:
           shell: bash
           run: |
             terraform init
-            terraform plan -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=/tfplanoutput/tfplan
+            terraform plan -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ vars.TERRAFORM_WORKING_DIR }}/tfplanoutput/tfplan
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
