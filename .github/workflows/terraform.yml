@@ -9,6 +9,8 @@ jobs:
   plan:
     name: 'Run Terraform Plan'
     runs-on: ubuntu-22.04
+    permissions:
+      issues: write
     
     defaults:
       run:
@@ -45,8 +47,6 @@ jobs:
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
-          permissions:
-            issues: write
           with:
             secret: ${{ github.TOKEN }}
             approvers: ${{ github.actor }}
