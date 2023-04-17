@@ -37,13 +37,13 @@ jobs:
         - name: Create Artifact Folder 
           shell: bash
           run: |
-            sudo mkdir -p -m007 ${{ github.workspace }}/tfplanoutput
+            sudo mkdir -p -m700 ${{ github.workspace }}/tfplanoutput
 
         - name: Terraform Init and Plan
           shell: bash
           run: |
             terraform init
-            terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ github.workspace }}/tfplanoutput/tfplan
+            sudo terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ github.workspace }}/tfplanoutput/tfplan
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
