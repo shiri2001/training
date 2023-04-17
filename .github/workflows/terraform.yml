@@ -96,6 +96,7 @@ jobs:
     
       - name: Terraform Apply
         run: |
+          terraform init
           terraform apply ${{ github.workspace }}/tfplanoutput/tfplan
 
           
