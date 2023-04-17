@@ -37,14 +37,13 @@ jobs:
         - name: Create Artifact Folder 
           shell: bash
           run: |
-            sudo mkdir -p -m777 ${{ vars.TERRAFORM_WORKING_DIR }}/tfplanoutput
+            sudo mkdir -p -m777 ${{ github.workspace }}/tfplanoutput
 
         - name: Terraform Init and Plan
           shell: bash
           run: |
-            echo "$PWD"
             terraform init
-            terraform plan -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ vars.TERRAFORM_WORKING_DIR }}/tfplanoutput/tfplan
+            terraform plan -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ github.workspace }}/tfplanoutput/tfplan
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
@@ -60,7 +59,7 @@ jobs:
           uses: actions/upload-artifact@v3
           with:
             name: artifact
-            path: ${{ vars.TERRAFORM_WORKING_DIR }}/tfplanoutput/
+            path: ${{ github.workspace }}/tfplanoutput/
             if-no-files-found: error
   apply:
     name: 'Run Terraform Apply'
@@ -87,9 +86,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}     
+          aws-region: ${{ vars.AWS_REGION }}  
+            
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+           name: artifact
+           path: ${{ github.workspace }}/tfplanoutput
+    
       - name: Terraform Apply
         run: |
-          terraform apply -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true "Infrastructure/tfplanoutput/tfplan"
+          terraform apply -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true ${{ github.workspace }}/tfplanoutput/tfplan
 
           
