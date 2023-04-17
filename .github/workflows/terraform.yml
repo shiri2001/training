@@ -6,10 +6,7 @@ on:
         - main
         - create_github_actions
     workflow_dispatch:
-      inputs:
-        logLevel:
-          description: 'Log level'
-          required: true
+
 
 jobs:
   plan:
