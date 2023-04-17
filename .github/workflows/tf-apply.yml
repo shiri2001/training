@@ -37,7 +37,7 @@ jobs:
         - name: Create Artifact Folder 
           shell: bash
           run: |
-            sudo mkdir -p -m500 ${{ github.workspace }}/tfplanoutput
+            sudo mkdir -p -m700 ${{ github.workspace }}/tfplanoutput
 
         - name: Terraform Init and Plan
           shell: bash
