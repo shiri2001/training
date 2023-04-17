@@ -1,4 +1,4 @@
-output "public_ip" {
+output "bastion_server_public_ip" {
   value       = aws_instance.bastion.public_ip
   description = "EC2 instance public ip"
 }
@@ -8,6 +8,6 @@ output "private_key" {
   sensitive = true
 }
 
-output "volume_id" {
+output "app_volume_id" {
   value = length(aws_ebs_volume.vm_vol) > 0 ? aws_ebs_volume.vm_vol[0].id : ""
 }

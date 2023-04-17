@@ -68,7 +68,7 @@ resource "aws_security_group" "vpc_security_group" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16", var.input_ip]
+    cidr_blocks = ["172.31.0.0/16", var.input_personal_ip]
   }
   egress {
     from_port        = 0
@@ -122,7 +122,7 @@ resource "aws_route_table_association" "private_route_table_association" {
 
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.my_instance_type
+  instance_type               = var.app_instance_type
   key_name                    = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids      = [aws_security_group.vpc_security_group.id]
   associate_public_ip_address = true
@@ -131,14 +131,12 @@ resource "aws_instance" "bastion" {
 
 resource "aws_instance" "vm" {
   ami                         = data.aws_ami.ubuntu.id
-  instance_type               = var.my_instance_type
+  instance_type               = var.app_instance_type
   key_name                    = aws_key_pair.ssh_key.key_name
   vpc_security_group_ids      = [aws_security_group.private_security_group.id]
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.private_subnet.id
-  user_data                   = <<-EOF
-   /bin/bash ./mount.sh /apps/volume/new-vol 
-   EOF
+  user_data                   = templatefile("./mount.sh",{VOLUME_PATH="/apps/volume/new-vol"})
 }
 
 resource "aws_route" "gateway_route" {
