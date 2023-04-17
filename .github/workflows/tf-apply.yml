@@ -1,11 +1,8 @@
 name: Terraform-and-test
 run-name: run by ${{ github.actor }}
 on:
-    push:
-      branches:
-        - main
-        - create_github_actions
-    workflow_dispatch:
+    - push
+    - workflow_dispatch
 
 
 jobs:
@@ -21,7 +18,7 @@ jobs:
 
     steps:
         - name: 'Checkout'
-          uses: actions/checkout@v2
+          uses: actions/checkout@v3.5.2
 
         - name: HashiCorp - Setup Terraform
           uses: hashicorp/setup-terraform@v2.0.3
@@ -46,7 +43,7 @@ jobs:
           shell: bash
           run: |
             terraform init
-            terraform plan -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ github.workspace }}/tfplanoutput/tfplan
+            terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ github.workspace }}/tfplanoutput/tfplan
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
@@ -75,7 +72,7 @@ jobs:
     
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.5.2
 
       - name: HashiCorp - Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
@@ -101,6 +98,6 @@ jobs:
         run: |
           terraform init
           terraform apply ${{ github.workspace }}/tfplanoutput/tfplan
-          terraform destroy -var input_ip=${{ secrets.INPUT_IP }} -var add_disk=true -input=false -auto-approve
+          terraform destroy -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -input=false -auto-approve
 
           
