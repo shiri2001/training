@@ -11,13 +11,13 @@ variable "az" {
 
 }
 
-variable "my_instance_type" {
+variable "app_instance_type" {
   type        = string
   description = "The EC2 instance type"
   default     = "t2.micro"
 }
 
-variable "input_ip" {
+variable "input_personal_ip" {
   type = string
 }
 

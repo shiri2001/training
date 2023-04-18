@@ -4,5 +4,5 @@ terraform.tfstate
 terraform.tfstate.backup
 *.pem
 *.ppk
-volume_id.txt
+app_volume_id.txt
 
