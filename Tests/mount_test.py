@@ -6,7 +6,7 @@ os.system(
     'cmd /c "cd .. & cd Infrastructure & \
         terraform output -raw app_volume_id > app_volume_id.txt"')
 
-if os.path.isfile('.//app_volume_id.txt') == True:
+if os.path.isfile('.//app_volume_id.txt') is True:
     infile = open('app_volume_id.txt', 'r')
     app_volume_id = infile.read()
     infile.close()
