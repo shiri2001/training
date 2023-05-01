@@ -4,12 +4,13 @@ Tests if the app is running correctly
 
 import subprocess
 import sys
+import os
 PATH = str(subprocess.check_output(
-        "cd", shell=True, universal_newlines=True)).rstrip() + "\\App"
+        "cd", shell=True, universal_newlines=True)).rstrip()
 
-sys.path.append(PATH)
+sys.path.append(os.path.abspath(PATH))
 
-from app import app  # noqa: E402
+from App import app  # noqa: E402
 
 
 class TestApp:
