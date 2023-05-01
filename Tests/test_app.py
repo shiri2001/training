@@ -14,5 +14,5 @@ from App import app  # noqa: E402
 
 
 class TestApp:
-    def print_output(self):
+    def test_print_output(self):
         assert app() == "this is a placeholder", "output incorrect"
