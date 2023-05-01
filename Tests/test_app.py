@@ -15,4 +15,4 @@ from App import app  # noqa: E402
 
 class TestApp:
     def test_print_output(self):
-        print("this is a placeholder")
+        assert app.app() == "this is a placeholder", "output incorrect"
