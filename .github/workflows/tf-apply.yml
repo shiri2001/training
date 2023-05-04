@@ -44,7 +44,7 @@ jobs:
           shell: bash
           run: |
             terraform init
-            terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ github.workspace }}/tfplanoutput/tfplan
+            terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -out=${{ github.workspace }}/tfplanoutput/tfplan
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
@@ -99,6 +99,6 @@ jobs:
         run: |
           terraform init
           terraform apply ${{ github.workspace }}/tfplanoutput/tfplan
-          terraform destroy -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -input=false -auto-approve
+          terraform destroy -var input_personal_ip=${{ secrets.INPUT_IP }} -input=false -auto-approve
 
           
