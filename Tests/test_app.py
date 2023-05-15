@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(PATH))
 
 from App import app  # noqa: E402
 
-
+print(app.game("ROCK"))
 class TestApp:
     def test_print_output(self):
         assert app.game("ROCK") == (
