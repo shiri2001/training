@@ -12,4 +12,4 @@ Lib
 Scripts
 .pytest_cache
 .coverage
-
+venv
