@@ -15,6 +15,7 @@ from App import app  # noqa: E402
 
 class TestApp:
     def test_print_output(self):
-        assert app.game("ROCK") == ("Computer chose PAPER! too bad! you lost!" or
+        assert app.game("ROCK") == ("Computer chose PAPER! too bad! \
+                                    you lost!" or
                                     "Computer chose SCISSORS! You won!" or
                                     "Computer chose ROCK! It's a draw!")
