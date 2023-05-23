@@ -40,14 +40,53 @@ jobs:
         - name: Git Semantic Version
           uses: PaulHatch/semantic-version@v5.0.3
           with:
+            tag_prefix: "v"
             major_pattern: "(MAJOR)"
             minor_pattern: "(MINOR)"
             version_format: "${major}.${minor}.${patch}-prerelease${increment}"
-            change_path: "training/App"
-            namespace: app
+            change_path: "./"
+            namespace: repository
             bump_each_commit: true
             search_commit_body: true
             user_format_type: "csv"
+
+        - name: Application Version
+          id: version
+          uses: paulhatch/semantic-version@v5.0.3
+          with:
+            tag_prefix: "v"
+            major_pattern: "(MAJOR-APP)"
+            minor_pattern: "(MINOR-APP)"
+            version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+            change_path: "training/App"
+            namespace: app
+            bump_each_commit: false
+            search_commit_body: true
+            user_format_type: "csv"
+
+        - name: Create App release
+          uses: thedoctor0/zip-release@0.7.1
+          with:
+              type: "zip"
+              filename: "App-release.zip"
+              exclusions: "*.git* /*node_modules/* .editorconfig */Release"
+              directory: "training/App"
+              path: "./Release"
+
+        - name: Create Release
+          id: create_release
+          uses: actions/create-release@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          with:
+              tag_name: ${{ github.ref }}
+              release_name: Release ${{ github.ref }}
+              body: |
+                Changes in this Release
+                - First Change
+                - Second Change
+              draft: false
+              prerelease: false
 
 
         

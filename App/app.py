@@ -1,48 +1,56 @@
-from flask import Flask, request
+from flask import Flask, render_template
 import random
 
-image_path = ".\\Images"
 app = Flask(__name__)
-option_list = ["ROCK", "PAPER", "SCISSORS"]
-player_win = 0
-computer_win = 0
+option_list = ["rock", "paper", "scissors"]
 
 
 @app.route("/")
+@app.route("/home", methods=["POST"])
 def index():
-    answer = request.args.get("answer", "")
-    return (
-        """<h1>Rock Paper scissors! please make your choice</h1>
-                <form action="" method="get">
-                    <input type="text" name="answer">
-                    <input type="submit" value="submit">
-                </form>"""
-        + game(answer)
-    )
+    return render_template('home.html', result="none")
 
 
-@app.route("/<int:answer>")
-def game(answer):
+@app.route("/rock")
+def rock():
     computer_choice = random.choice(option_list)
-    if answer.upper() == computer_choice:
-        return f"Computer chose {computer_choice}! It's a draw!"
-    elif answer.upper() == "rock".upper():
-        if computer_choice == "PAPER":
-            return f"Computer chose {computer_choice}! too bad! you lost!"
-        else:
-            return f"Computer chose {computer_choice}! You won!"
-    elif answer.upper() == "paper".upper():
-        if computer_choice == "SCISSORS":
-            return f"Computer chose {computer_choice}! too bad! you lost!"
-        else:
-            return f"Computer chose {computer_choice}! You won!"
-    elif answer.upper() == "scissors".upper():
-        if computer_choice == "SCISSORS":
-            return f"Computer chose {computer_choice}! too bad! you lost!"
-        else:
-            return f"Computer chose {computer_choice}! You won!"
+    if computer_choice == "rock":
+        return render_template("rock.html", cpu_choice=computer_choice,
+                               result="It's a draw!")
+    elif computer_choice == "paper":
+        return render_template("rock.html", cpu_choice=computer_choice,
+                               result="You lost!")
     else:
-        return "type a valid input"
+        return render_template("rock.html", cpu_choice=computer_choice,
+                               result="You won!")
+
+
+@app.route("/paper")
+def paper():
+    computer_choice = random.choice(option_list)
+    if computer_choice == "paper":
+        return render_template("paper.html", cpu_choice=computer_choice,
+                               result="It's a draw!")
+    elif computer_choice == "scissors":
+        return render_template("paper.html", cpu_choice=computer_choice,
+                               result="You lost!")
+    else:
+        return render_template("paper.html", cpu_choice=computer_choice,
+                               result="You won!")
+
+
+@app.route("/scissors")
+def scissors():
+    computer_choice = random.choice(option_list)
+    if computer_choice == "scissors":
+        return render_template("scissors.html", cpu_choice=computer_choice,
+                               result="It's a draw!")
+    elif computer_choice == "rock":
+        return render_template("scissors.html", cpu_choice=computer_choice,
+                               result="You lost!")
+    else:
+        return render_template("scissors.html", cpu_choice=computer_choice,
+                               result="You won!")
 
 
 if __name__ == "__main__":

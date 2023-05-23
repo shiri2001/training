@@ -1,12 +1,13 @@
 # Create Infrastructure
 
 This project creates a basic infrastructure using AWS, consisting an app server with a volume attached to it, accessible only through a bastion server. 
-The project contains a simple rock/paper/scissors app.
+The project contains a rock/paper/scissors web app.
 
 ## Usage
 
 Run tf-apply.yml file in the .github/workflows directory to apply the infrastructure.
-run CI.yml file in the .github/workflows directory to build and test the app.
+Run CI.yml file in the .github/workflows directory to build and test the app.
+Run app.py on /App to run the application.
 
 ## Testing
 
