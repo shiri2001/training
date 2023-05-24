@@ -9,6 +9,8 @@ jobs:
   build:
     name: Build
     permissions:
+      id-token: write
+      contents: read
       issues: write
     runs-on: ubuntu-22.04
     
