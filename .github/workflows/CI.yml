@@ -76,11 +76,6 @@ jobs:
               path: "./"
           #if: ${{ github.ref == 'refs/heads/main' }}
 
-        - name: move app release to release folder
-          run: |
-            mv ./App/App-release-${major}.${minor}.${patch}.zip ./App/Release/App-release-${major}.${minor}.${patch}.zip
-
-
         - name: Create Release
           id: create_release
           uses: actions/create-release@v1
