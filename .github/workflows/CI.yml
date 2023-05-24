@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     name: Build
+    permissions:
+      issues: write
     runs-on: ubuntu-22.04
     
     steps:
@@ -78,7 +80,6 @@ jobs:
 
         - name: Create Release
           id: create_release
-          permissions: write-all
           uses: actions/create-release@v1
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
