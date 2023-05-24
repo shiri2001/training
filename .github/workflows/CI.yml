@@ -4,7 +4,7 @@ on:
     - push
     - workflow_dispatch
 
-
+    
 jobs:
   build:
     name: Build
@@ -49,6 +49,7 @@ jobs:
             bump_each_commit: true
             search_commit_body: true
             user_format_type: "csv"
+          #if: ${{ github.ref == 'refs/heads/main' }} 
 
         - name: Application Version
           id: version
@@ -63,6 +64,7 @@ jobs:
             bump_each_commit: false
             search_commit_body: true
             user_format_type: "csv"
+          #if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Create App release
           uses: thedoctor0/zip-release@0.7.1
@@ -72,6 +74,7 @@ jobs:
               exclusions: "*.git* /*node_modules/* .editorconfig */Release"
               directory: "training/App"
               path: "./Release"
+          #if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Create Release
           id: create_release
@@ -87,6 +90,7 @@ jobs:
                 - Second Change
               draft: false
               prerelease: false
+          #if: ${{ github.ref == 'refs/heads/main' }}
 
 
         
