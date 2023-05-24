@@ -73,7 +73,7 @@ jobs:
               filename: "App-release.zip"
               exclusions: "*.git* /*node_modules/* .editorconfig */Release"
               directory: "./App"
-              path: "Release"
+              path: "./App/Release"
           #if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Create Release
