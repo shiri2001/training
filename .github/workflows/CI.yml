@@ -70,11 +70,16 @@ jobs:
           uses: thedoctor0/zip-release@0.7.1
           with:
               type: "zip"
-              filename: "App-release.zip"
+              filename: "App-release-${major}.${minor}.${patch}.zip"
               exclusions: "*.git* /*node_modules/* .editorconfig */Release"
               directory: "./App"
-              path: "./App/Release"
+              path: "./"
           #if: ${{ github.ref == 'refs/heads/main' }}
+
+        - name: move app release to release folder
+          run: |
+            mv ./App/App-release-${major}.${minor}.${patch}.zip ./App/Release/App-release-${major}.${minor}.${patch}.zip
+
 
         - name: Create Release
           id: create_release
