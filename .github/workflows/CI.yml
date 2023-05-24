@@ -9,10 +9,7 @@ jobs:
   build:
     name: Build
     permissions:
-      id-token: write
-      contents: read
-      issues: write
-      pull-requests: write
+      contents: write
     runs-on: ubuntu-22.04
     
     steps:
