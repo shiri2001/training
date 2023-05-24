@@ -4,7 +4,7 @@ on:
     - push
     - workflow_dispatch
 
-    
+
 jobs:
   build:
     name: Build
@@ -59,7 +59,7 @@ jobs:
             major_pattern: "(MAJOR-APP)"
             minor_pattern: "(MINOR-APP)"
             version_format: "${major}.${minor}.${patch}-prerelease${increment}"
-            change_path: "training/App"
+            change_path: "./App"
             namespace: app
             bump_each_commit: false
             search_commit_body: true
@@ -72,7 +72,7 @@ jobs:
               type: "zip"
               filename: "App-release.zip"
               exclusions: "*.git* /*node_modules/* .editorconfig */Release"
-              directory: "training/App"
+              directory: "./App"
               path: "./Release"
           #if: ${{ github.ref == 'refs/heads/main' }}
 
