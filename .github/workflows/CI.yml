@@ -52,14 +52,8 @@ jobs:
             bump_each_commit: true
             search_commit_body: true
             user_format_type: "csv"  
-            enable_prerelease_mode: false
+            
           #if: ${{ github.ref == 'refs/heads/main' }} 
-
-        - name: Tag Release (vX.Y.Z)
-          run: |
-            git tag ${{ steps.repo_sem_ver.outputs.version_tag }}
-            git push origin ${{ steps.repo_sem_ver.outputs.version_tag }}
-          #if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Application Version
           id: version
@@ -80,7 +74,7 @@ jobs:
           uses: thedoctor0/zip-release@0.7.1
           with:
               type: "zip"
-              filename: "App-release-${major}.${minor}.${patch}.zip"
+              filename: "App-release-${{ steps.repo_sem_ver.outputs.version_tag }}.zip"
               exclusions: "*.git* /*node_modules/* .editorconfig */Release"
               directory: "./App"
               path: "./"
