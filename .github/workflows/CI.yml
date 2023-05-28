@@ -83,8 +83,9 @@ jobs:
         - name: Create Release
           uses: ncipollo/release-action@v1.12.0
           with:
+            allowUpdates: true
             artifactErrorsFailBuild: true
-            commit: "*"
+            commit: main
             generateReleaseNotes: true
             makeLatest: true
             tag: ${{ steps.repo_sem_ver.outputs.version_tag }}
