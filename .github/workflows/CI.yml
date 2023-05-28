@@ -41,6 +41,7 @@ jobs:
 
         - name: Git Semantic Version
           uses: PaulHatch/semantic-version@v5.0.3
+          id: repo_sem_ver
           with:
             tag_prefix: "v"
             major_pattern: "(MAJOR)"
@@ -50,8 +51,14 @@ jobs:
             namespace: repository
             bump_each_commit: true
             search_commit_body: true
-            user_format_type: "csv"
+            user_format_type: "csv"  
           #if: ${{ github.ref == 'refs/heads/main' }} 
+
+        - name: Tag Release (vX.Y.Z)
+          run: |
+            git tag ${{ steps.repo_sem_ver.outputs.version_tag }}
+            git push origin ${{ steps.repo_sem_ver.outputs.version_tag }}
+          #if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Application Version
           id: version
