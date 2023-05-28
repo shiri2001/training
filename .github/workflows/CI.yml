@@ -79,19 +79,13 @@ jobs:
           #if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Create Release
-          id: create_release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          uses: ncipollo/release-action@v1.12.0
           with:
-              tag_name: "v*"
-              release_name: "Release v*"
-              body: |
-                Changes in this Release
-                - First Change
-                - Second Change
-              draft: false
-              prerelease: false
+            artifactErrorsFailBuild: true
+            commit: true
+            generateReleaseNotes: true
+            makeLatest: true
+        
           #if: ${{ github.ref == 'refs/heads/main' }}
 
 
