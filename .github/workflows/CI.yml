@@ -53,7 +53,7 @@ jobs:
             search_commit_body: true
             user_format_type: "csv"  
             
-          #if: ${{ github.ref == 'refs/heads/main' }} 
+          if: ${{ github.ref == 'refs/heads/main' }} 
 
         - name: Application Version
           id: version
@@ -68,7 +68,7 @@ jobs:
             bump_each_commit: false
             search_commit_body: true
             user_format_type: "csv"
-          #if: ${{ github.ref == 'refs/heads/main' }}
+          if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Create App release
           uses: thedoctor0/zip-release@0.7.1
@@ -78,7 +78,7 @@ jobs:
               exclusions: "*.git* /*node_modules/* .editorconfig */Release"
               directory: "./App"
               path: "./"
-          #if: ${{ github.ref == 'refs/heads/main' }}
+          if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Create Release
           uses: ncipollo/release-action@v1.12.0
@@ -89,8 +89,7 @@ jobs:
             generateReleaseNotes: true
             makeLatest: true
             tag: ${{ steps.repo_sem_ver.outputs.version_tag }}
-        
-          #if: ${{ github.ref == 'refs/heads/main' }}
+          if: ${{ github.ref == 'refs/heads/main' }}
 
 
         
