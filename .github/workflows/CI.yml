@@ -94,7 +94,7 @@ jobs:
         - name: Upload App Release
           uses: ncipollo/release-action@v1.12.0
           with:
-            artifacts: "App-release-${{ steps.app_sem_ver.outputs.version_tag }}.zip"
+            artifacts: "*/App-release-${{ steps.app_sem_ver.outputs.version_tag }}.zip"
             allowUpdates: true
             artifactErrorsFailBuild: true
             commit: main
