@@ -52,6 +52,7 @@ jobs:
             bump_each_commit: true
             search_commit_body: true
             user_format_type: "csv"  
+            enable_prerelease_mode: false
           #if: ${{ github.ref == 'refs/heads/main' }} 
 
         - name: Tag Release (vX.Y.Z)
