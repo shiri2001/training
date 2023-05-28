@@ -78,7 +78,7 @@ jobs:
               exclusions: "*.git* /*node_modules/* .editorconfig */Release"
               directory: "./App"
               path: "./"
-          if: ${{ github.ref == 'refs/heads/main' }}
+          #if: ${{ github.ref == 'refs/heads/main' }}
 
         - name: Create Release
           uses: ncipollo/release-action@v1.12.0
