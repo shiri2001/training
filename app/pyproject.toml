@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[project]
+name = "rock_paper_scissors_shiri2001"
+version = "0.0.1"
+authors = [
+  { name="shiri2001", email="shirile01@gmail.com" },
+]
+description = "rock paper scissors web app"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/shiri2001/training"

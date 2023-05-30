@@ -1,13 +1,14 @@
 name: Terraform-and-test
 run-name: run by ${{ github.actor }}
 on:
-    - push
-    - workflow_dispatch
-
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   plan:
-    name: 'Run Terraform Plan'
+    name: Run Terraform Plan
     runs-on: ubuntu-22.04
     permissions:
       issues: write
@@ -17,9 +18,9 @@ jobs:
         working-directory: ${{ vars.TERRAFORM_WORKING_DIR }}
 
     steps:
-        - name: 'Checkout'
+        - name: Checkout
           uses: actions/checkout@v3.5.2
-
+          
         - name: HashiCorp - Setup Terraform
           uses: hashicorp/setup-terraform@v2.0.3
           with:
@@ -43,7 +44,7 @@ jobs:
           shell: bash
           run: |
             terraform init
-            terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -out=${{ github.workspace }}/tfplanoutput/tfplan
+            terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -out=${{ github.workspace }}/tfplanoutput/tfplan
 
         - name: Manual Terraform Plan Approval
           uses: trstringer/manual-approval@v1.9.0
@@ -62,7 +63,7 @@ jobs:
             path: ${{ github.workspace }}/tfplanoutput/
             if-no-files-found: error
   apply:
-    name: 'Run Terraform Apply'
+    name: Run Terraform Apply
     needs: plan
     runs-on: ubuntu-22.04
     
@@ -71,7 +72,7 @@ jobs:
         working-directory: ${{ vars.TERRAFORM_WORKING_DIR }}
     
     steps:
-      - name: 'Checkout'
+      - name: Checkout
         uses: actions/checkout@v3.5.2
 
       - name: HashiCorp - Setup Terraform
@@ -98,6 +99,6 @@ jobs:
         run: |
           terraform init
           terraform apply ${{ github.workspace }}/tfplanoutput/tfplan
-          terraform destroy -var input_personal_ip=${{ secrets.INPUT_IP }} -var add_disk=true -input=false -auto-approve
+          terraform destroy -var input_personal_ip=${{ secrets.INPUT_IP }} -input=false -auto-approve
 
           

@@ -1,0 +1,106 @@
+name: Github CI
+run-name: run by ${{ github.actor }}
+on:
+    - push
+    - workflow_dispatch
+
+
+jobs:
+  build:
+    name: Build
+    permissions:
+      contents: write
+    runs-on: ubuntu-22.04
+    
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v3.5.2     
+
+        - name: Setup Python
+          uses: actions/setup-python@v4.6.0
+
+        - name: Install Dependencies
+          shell: bash
+          run: |
+            python -m venv venv
+            . venv/bin/activate
+            cd app
+            pip install -r requirements.txt
+
+        - name: Configure AWS Credentials For GitHub Actions
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ vars.AWS_REGION }}
+        
+        - name: Run Tests
+          run: |
+            . venv/bin/activate
+            flake8 --exclude=venv* --statistics
+            pytest -v  --cov
+
+        - name: Git Repo Semantic Version
+          uses: PaulHatch/semantic-version@v5.0.3
+          id: repo_sem_ver
+          with:
+            tag_prefix: "v"
+            major_pattern: "BREAKING CHANGES"
+            minor_pattern: "feat"
+            version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+            change_path: "./"
+            namespace: repository
+            bump_each_commit: true
+            search_commit_body: true
+            user_format_type: "csv"  
+
+        - name: Application Semantic Version
+          id: app_sem_ver
+          uses: paulhatch/semantic-version@v5.0.3
+          with:
+            tag_prefix: "v"
+            major_pattern: "BREAKING CHANGES"
+            minor_pattern: "feat"
+            version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+            change_path: "./app"
+            namespace: app
+            bump_each_commit: false
+            search_commit_body: true
+            user_format_type: "csv"
+
+        - name: Prepare App For Release
+          uses: thedoctor0/zip-release@0.7.1
+          with:
+              type: "zip"
+              filename: "App-release-${{ steps.app_sem_ver.outputs.version_tag }}.zip"
+              exclusions: "*.git* /*node_modules/* .editorconfig"
+              directory: "./app"
+              path: "./"
+          if: ${{ github.ref == 'refs/heads/main' }}
+
+        - name: Upload Repo Release
+          uses: ncipollo/release-action@v1.12.0
+          with:
+            allowUpdates: true
+            artifactErrorsFailBuild: true
+            commit: main
+            generateReleaseNotes: true
+            makeLatest: true
+            tag: ${{ steps.repo_sem_ver.outputs.version_tag }}
+          if: ${{ github.ref == 'refs/heads/main' }}
+        
+        - name: Upload App Release
+          uses: ncipollo/release-action@v1.12.0
+          with:
+            artifacts: "*/App-release-${{ steps.app_sem_ver.outputs.version_tag }}.zip"
+            allowUpdates: true
+            artifactErrorsFailBuild: true
+            commit: main
+            generateReleaseNotes: true
+            makeLatest: true
+            tag: ${{ steps.app_sem_ver.outputs.version_tag }}
+            token: ${{ secrets.GITHUB_TOKEN }}
+          if: ${{ github.ref == 'refs/heads/main' }}
+
+
+        

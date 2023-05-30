@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h1>please make your choice</h1>
+    <a href="{{ url_for("rock") }}">
+      <img src="../static/rock.png" width="100" height="100">
+    </a>
+    <a href="{{ url_for("paper") }}">
+      <img src="../static/paper.png" width="100" height="100">
+    </a>
+    <a href="{{ url_for("scissors") }}">
+      <img src="../static/scissors.png" width="100" height="100">
+    </a>
+{% endblock content %}

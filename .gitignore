@@ -5,4 +5,11 @@ terraform.tfstate.backup
 *.pem
 *.ppk
 app_volume_id.txt
-
+pyvenv.cfg
+__pycache__
+include
+Lib
+Scripts
+.pytest_cache
+.coverage
+venv
