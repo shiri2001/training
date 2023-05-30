@@ -5,7 +5,7 @@ The project contains a rock/paper/scissors web app.
 
 ## Usage
 
-Run tf-apply.yml file in the .github/workflows directory to apply the infrastructure.
+Run deploy-infrastructure.yml file in the .github/workflows directory to apply the infrastructure.
 Run CI.yml file in the .github/workflows directory to build and test the app.
 Run app.py on /App to run the application.
 
