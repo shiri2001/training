@@ -3,10 +3,10 @@ import git
 from git import Repo
 
 current_path = os.getcwd()
-new_dir = "script"
-script_path = os.path.join(current_path, new_dir)
+script_path = os.path.join(current_path)
 remote_url = "git@github.com:shiri2001/training.git"
 branch = "feature/issue004/add-sem-ver-python-script"  # noqa:E501 change later to main so it only runs on main
+print(script_path)
 repo = Repo(script_path)
 
 
@@ -43,8 +43,8 @@ def main():
         current_commit.translate({ord(i): None for i in "'"}))
     print(f"{last_commit}, {current_commit}")
     change = git.diff(last_commit_hash, current_commit_hash, "--", "app/")
-    print(change)
-    commit_message = git.log("--format=%B", "-n", "1", last_commit)
+    commit_message = git.log("--format=%B", "-n", "1")
+    print(commit_message)
     if change == "":
         print("app version unchanged")
     else:
