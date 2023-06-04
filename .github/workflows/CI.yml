@@ -60,8 +60,7 @@ jobs:
             . venv/bin/activate
             cd script
             pip install -r requirements.txt
-            python sem-ver-action.py
-            echo "tag_name=$(python sem-ver-action.py)" >> $GITHUB_OUTPUTS
+            echo "tag_name=$(python ./script/sem-ver-action.py)" >> $GITHUB_OUTPUTS
 
         - name: Prepare App For Release
           uses: thedoctor0/zip-release@0.7.1
