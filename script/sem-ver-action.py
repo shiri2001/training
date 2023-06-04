@@ -6,7 +6,6 @@ current_path = os.getcwd()
 script_path = os.path.join(current_path)
 remote_url = "git@github.com:shiri2001/training.git"
 branch = "feature/issue004/add-sem-ver-python-script"  # noqa:E501 change later to main so it only runs on main
-print(script_path)
 repo = Repo(script_path)
 
 
@@ -41,12 +40,10 @@ def main():
     current_commit = git.log("-n", "1", "--pretty=format:'%H'")
     current_commit_hash = str(
         current_commit.translate({ord(i): None for i in "'"}))
-    print(f"{last_commit}, {current_commit}")
     change = git.diff(last_commit_hash, current_commit_hash, "--", "app/")
     commit_message = git.log("--format=%B", "-n", "1")
-    print(commit_message)
     if change == "":
-        print("app version unchanged")
+        pass
     else:
         if "patch:" in commit_message:
             patch += 1
@@ -61,6 +58,7 @@ def main():
             pass
         new_tag = (f"v{major}.{minor}.{patch}-app")
         git.tag("-a", new_tag, "-m", f"new app version {new_tag}")
+        print(new_tag)
 
 
 if __name__ == "__main__":
