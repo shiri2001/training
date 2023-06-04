@@ -3,7 +3,7 @@ import random
 
 app = Flask(__name__)
 option_list = ["rock", "paper", "scissors"]
-print("testt")
+print("test")
 
 
 @app.route("/")
