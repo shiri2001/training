@@ -8,7 +8,6 @@ branch = "feature/issue004/add-sem-ver-python-script"  # noqa:E501 change later 
 repo = Repo(script_path)
 
 
-
 def clone():
     try:
         Repo.clone_from(remote_url, script_path)
