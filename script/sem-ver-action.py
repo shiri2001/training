@@ -54,7 +54,7 @@ def main():
             major +=1
         else: 
             pass
-        new_tag = (f"v{major}.{minor}.{patch}")
+        new_tag = (f"v{major}.{minor}.{patch}-app")
         git.tag("-a", new_tag, "-m", f"new app version {new_tag}" )
 if __name__ == "__main__":
     create_path()
