@@ -2,18 +2,10 @@ import os
 import git
 from git import Repo
 
-current_path = os.getcwd()
-script_path = os.path.join(current_path)
+script_path = os.getcwd()
 remote_url = "git@github.com:shiri2001/training.git"
 branch = "feature/issue004/add-sem-ver-python-script"  # noqa:E501 change later to main so it only runs on main
 repo = Repo(script_path)
-
-
-def create_path():
-    if os.path.exists(script_path):
-        pass
-    else:
-        os.mkdir(script_path)
 
 
 def clone():
@@ -62,6 +54,5 @@ def main():
 
 
 if __name__ == "__main__":
-    create_path()
     clone()
     main()
