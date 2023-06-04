@@ -62,7 +62,7 @@ jobs:
             pip install -r requirements.txt
             cd ..
             python sem-ver-action.py
-            tag_name=${python sem-ver-action.py} >> $GITHUB_OUTPUT
+            tag_name=$(python sem-ver-action.py) >> $GITHUB_OUTPUT
 
         - name: Prepare App For Release
           uses: thedoctor0/zip-release@0.7.1
