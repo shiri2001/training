@@ -60,6 +60,7 @@ jobs:
             . venv/bin/activate
             cd script
             pip install -r requirements.txt
+            cd ..
             python sem-ver-action.py
             echo "TAG_NAME=$(git describe --tags --abbrev=0 --match "*-app")" >> $GITHUB_OUTPUTS
 
