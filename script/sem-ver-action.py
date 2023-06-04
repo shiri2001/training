@@ -44,15 +44,16 @@ def main():
     print(f"{last_commit}, {current_commit}")
     change = git.diff(last_commit_hash, current_commit_hash, "--", "app/")
     print(change)
+    commit_message = git.log("--format=%B", "-n", "1", last_commit)
     if change == "":
         print("app version unchanged")
     else:
-        if "patch:" in change:
+        if "patch:" in commit_message:
             patch += 1
-        elif "feat:" in change:
+        elif "feat:" in commit_message:
             patch = 0
             minor += 1
-        elif "BREAKING CHANGES:":
+        elif "BREAKING CHANGES:" in commit_message:
             patch = 0
             minor = 0
             major += 1
