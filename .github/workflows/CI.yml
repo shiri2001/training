@@ -62,13 +62,13 @@ jobs:
             pip install -r requirements.txt
             cd ..
             python sem-ver-action.py
-            echo "TAG_NAME=$(git describe --tags --abbrev=0 --match "*-app")" >> $GITHUB_OUTPUTS
+            echo "tag_name=${GITHUB_REF#refs/*/*-app}" >> $GITHUB_OUTPUT
 
         - name: Prepare App For Release
           uses: thedoctor0/zip-release@0.7.1
           with:
               type: "zip"
-              filename: "App-release-${{ steps.app_sem_ver.outputs.TAG_NAME }}.zip"
+              filename: "App-release-${{ steps.app_sem_ver.outputs.tag_name }}.zip"
               exclusions: "*.git* /*node_modules/* .editorconfig"
               directory: "./app"
               path: "./"
@@ -88,13 +88,13 @@ jobs:
         - name: Upload App Release
           uses: ncipollo/release-action@v1.12.0
           with:
-            artifacts: "*/App-release-${{ steps.app_sem_ver.outputs.TAG_NAME }}.zip"
+            artifacts: "*/App-release-${{ steps.app_sem_ver.outputs.tag_name }}.zip"
             allowUpdates: true
             artifactErrorsFailBuild: true
             commit: main
             generateReleaseNotes: true
             makeLatest: true
-            tag: ${{ steps.app_sem_ver.outputs.TAG_NAME}}
+            tag: ${{ steps.app_sem_ver.outputs.tag_name}}
             token: ${{ secrets.GITHUB_TOKEN }}
           # if: ${{ github.ref == 'refs/heads/main' }}
 
