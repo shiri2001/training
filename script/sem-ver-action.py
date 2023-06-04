@@ -8,6 +8,7 @@ branch = "feature/issue004/add-sem-ver-python-script"  # noqa:E501 change later 
 repo = Repo(script_path)
 
 
+
 def clone():
     try:
         Repo.clone_from(remote_url, script_path)
@@ -18,6 +19,8 @@ def clone():
 def main():
     repo.git.checkout(branch)
     git = repo.git
+    git.config("user.email", "<>")
+    git.config("user.name", "action_bot")
     tags = repo.tags
     latest_tag = str(tags[-1])
     bare_version = str(
