@@ -47,12 +47,12 @@ def main():
     if change == "":
         print("app version unchanged")
     else:
-        if "patch" in change:
+        if "patch:" in change:
             patch += 1
-        elif "feat" in change:
+        elif "feat:" in change:
             patch = 0
             minor += 1
-        elif "BREAKING CHANGES":
+        elif "BREAKING CHANGES:":
             patch = 0
             minor = 0
             major += 1
