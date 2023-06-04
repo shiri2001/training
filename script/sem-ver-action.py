@@ -1,13 +1,16 @@
+#  imports
 import os
 import git
 from git import Repo
 
+#  variables
 script_path = os.getcwd()
 remote_url = "git@github.com:shiri2001/training.git"
-branch = "feature/issue004/add-sem-ver-python-script"  # noqa:E501 change later to main so it only runs on main
+branch = "main"  # noqa:E501 change later to main so it only runs on main
 repo = Repo(script_path)
 
 
+#  clone repository from github if needed
 def clone():
     try:
         Repo.clone_from(remote_url, script_path)
@@ -16,10 +19,12 @@ def clone():
 
 
 def main():
+    # logging bot into github using desired branch
     repo.git.checkout(branch)
     git = repo.git
     git.config("user.email", "<>")
     git.config("user.name", "action_bot")
+    # divide latest tag to major minor and patch
     tags = repo.tags
     latest_tag = str(tags[-1])
     bare_version = str(
@@ -28,6 +33,8 @@ def main():
     major = int(version_split[0])
     minor = int(version_split[1])
     patch = int(version_split[2])
+    # compare the current and previous commits
+    # find out whether a change was made
     last_commit = git.log("-n", "1", "--skip", "1", "--pretty=format:'%H'")
     last_commit_hash = str(
         last_commit.translate({ord(i): None for i in "'"}))
@@ -35,6 +42,8 @@ def main():
     current_commit_hash = str(
         current_commit.translate({ord(i): None for i in "'"}))
     change = git.diff(last_commit_hash, current_commit_hash, "--", "app/")
+    # check commit message for relevant keywords
+    # and add 1 to major/minor/patch if needed
     commit_message = git.log("--format=%B", "-n", "1")
     if change == "":
         pass
@@ -50,6 +59,7 @@ def main():
             major += 1
         else:
             pass
+        # create new tag
         new_tag = (f"v{major}.{minor}.{patch}-app")
         git.tag("-a", new_tag, "-m", f"new app version {new_tag}")
         print(new_tag)
