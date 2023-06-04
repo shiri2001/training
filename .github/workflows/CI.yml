@@ -62,8 +62,7 @@ jobs:
             pip install -r requirements.txt
             cd ..
             python sem-ver-action.py
-            echo "tag_name=${GITHUB_REF#refs/*/*-app}"
-            echo "tag_name=${GITHUB_REF#refs/*/*-app}" >> $GITHUB_OUTPUT
+            echo "tag_name=`echo $(git describe --tags --abbrev=0 --match "*-app")`" >> $GITHUB_ENV
 
         - name: Prepare App For Release
           uses: thedoctor0/zip-release@0.7.1
