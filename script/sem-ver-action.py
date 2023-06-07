@@ -9,12 +9,10 @@ script_path = os.getcwd()
 remote_url = "git@github.com:shiri2001/training.git"
 branch = "main"  # noqa:E501 change later to main so it only runs on main
 
-# logger config
-logging.basicConfig(format='%(process)d-%(levelname)s-%(message)s')
-
 
 #  clone repository from github if needed
 def clone():
+    logging.info("trying to clone repository...")
     try:
         Repo.clone_from(remote_url, script_path)
         logging.info("repository cloned!")
@@ -22,7 +20,7 @@ def clone():
         logging.error("repository already cloned")
 
 
-def main():
+def sem_ver():
     # logging bot into github using desired branch
     logging.info("connecting to repository...")
     repo = Repo(script_path)
@@ -75,9 +73,15 @@ def main():
         print(new_tag)
 
 
-if __name__ == "__main__":
+def main():
+    # logger config
+    logging.basicConfig(format='%(process)d-%(levelname)s-%(message)s')
+    # start action
     logging.info("executing semantic versioning action!")
-    logging.info("trying to clone repository...")
     clone()
-    main()
+    sem_ver()
     logging.info("action complete!")
+
+
+if __name__ == "__main__":
+    main()
