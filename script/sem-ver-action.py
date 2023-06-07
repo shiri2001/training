@@ -2,29 +2,36 @@
 import os
 import git
 from git import Repo
+import logging
 
 #  variables
 script_path = os.getcwd()
 remote_url = "git@github.com:shiri2001/training.git"
 branch = "main"  # noqa:E501 change later to main so it only runs on main
-repo = Repo(script_path)
+
+# logger config
+logging.basicConfig(format='%(process)d-%(levelname)s-%(message)s')
 
 
 #  clone repository from github if needed
 def clone():
     try:
         Repo.clone_from(remote_url, script_path)
+        logging.info("repository cloned!")
     except git.exc.GitCommandError:
-        pass
+        logging.error("repository already cloned")
 
 
 def main():
     # logging bot into github using desired branch
+    logging.info("connecting to repository...")
+    repo = Repo(script_path)
     repo.git.checkout(branch)
     git = repo.git
     git.config("user.email", "<>")
     git.config("user.name", "action_bot")
     # divide latest tag to major minor and patch
+    logging.info("fetching tags...")
     tags = repo.tags
     latest_tag = str(tags[-1])
     bare_version = str(
@@ -35,6 +42,7 @@ def main():
     patch = int(version_split[2])
     # compare the current and previous commits
     # find out whether a change was made
+    logging.info("comparing commits...")
     last_commit = git.log("-n", "1", "--skip", "1", "--pretty=format:'%H'")
     last_commit_hash = str(
         last_commit.translate({ord(i): None for i in "'"}))
@@ -44,6 +52,7 @@ def main():
     change = git.diff(last_commit_hash, current_commit_hash, "--", "app/")
     # check commit message for relevant keywords
     # and add 1 to major/minor/patch if needed
+    logging.info("creating a new version...")
     commit_message = git.log("--format=%B", "-n", "1")
     if change == "":
         pass
@@ -60,11 +69,15 @@ def main():
         else:
             pass
         # create new tag
+        logging.info("creating a tag for the new version...")
         new_tag = (f"v{major}.{minor}.{patch}-app")
         git.tag("-a", new_tag, "-m", f"new app version {new_tag}")
         print(new_tag)
 
 
 if __name__ == "__main__":
+    logging.info("executing semantic versioning action!")
+    logging.info("trying to clone repository...")
     clone()
     main()
+    logging.info("action complete!")
