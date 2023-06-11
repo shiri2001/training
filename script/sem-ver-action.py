@@ -20,7 +20,7 @@ def clone():
         logging.error("repository already cloned")
 
 
-def sem_ver():
+def login():
     # logging bot into github using desired branch
     logging.info("connecting to repository...")
     repo = Repo(script_path)
@@ -28,8 +28,12 @@ def sem_ver():
     git = repo.git
     git.config("user.email", "<>")
     git.config("user.name", "action_bot")
+
+
+def divide_tag():
     # divide latest tag to major minor and patch
     logging.info("fetching tags...")
+    repo = Repo(script_path)
     tags = repo.tags
     latest_tag = str(tags[-1])
     bare_version = str(
@@ -38,9 +42,15 @@ def sem_ver():
     major = int(version_split[0])
     minor = int(version_split[1])
     patch = int(version_split[2])
+    return major, minor, patch
+
+
+def compare_commits():
     # compare the current and previous commits
     # find out whether a change was made
     logging.info("comparing commits...")
+    repo = Repo(script_path)
+    git = repo.git
     last_commit = git.log("-n", "1", "--skip", "1", "--pretty=format:'%H'")
     last_commit_hash = str(
         last_commit.translate({ord(i): None for i in "'"}))
@@ -48,10 +58,18 @@ def sem_ver():
     current_commit_hash = str(
         current_commit.translate({ord(i): None for i in "'"}))
     change = git.diff(last_commit_hash, current_commit_hash, "--", "app/")
+    return change
+
+
+def update_ver():
     # check commit message for relevant keywords
     # and add 1 to major/minor/patch if needed
     logging.info("creating a new version...")
+    repo = Repo(script_path)
+    git = repo.git
     commit_message = git.log("--format=%B", "-n", "1")
+    change = compare_commits()
+    major, minor, patch = divide_tag()
     if change == "":
         pass
     else:
@@ -66,11 +84,18 @@ def sem_ver():
             major += 1
         else:
             pass
-        # create new tag
-        logging.info("creating a tag for the new version...")
-        new_tag = (f"v{major}.{minor}.{patch}-app")
-        git.tag("-a", new_tag, "-m", f"new app version {new_tag}")
-        print(new_tag)
+    return major, minor, patch
+
+
+def create_tag():
+    # create new tag
+    repo = Repo(script_path)
+    git = repo.git
+    logging.info("creating a tag for the new version...")
+    major, minor, patch = update_ver()
+    new_tag = (f"v{major}.{minor}.{patch}-app")
+    git.tag("-a", new_tag, "-m", f"new app version {new_tag}")
+    print(new_tag)
 
 
 def main():
@@ -79,7 +104,14 @@ def main():
     # start action
     logging.info("executing semantic versioning action!")
     clone()
-    sem_ver()
+    login()
+    divide_tag()
+    compare_commits()
+    update_ver()
+    try:
+        create_tag()
+    except git.exc.GitCommandError:
+        logging.error("No changes found from last ver")
     logging.info("action complete!")
 
 
