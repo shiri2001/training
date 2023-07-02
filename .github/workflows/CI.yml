@@ -14,7 +14,9 @@ jobs:
     
     steps:
         - name: Checkout
-          uses: actions/checkout@v3.5.2     
+          uses: actions/checkout@v3.5.2  
+          with:
+            fetch-depth: 0   
 
         - name: Setup Python
           uses: actions/setup-python@v4.6.0
@@ -56,23 +58,19 @@ jobs:
 
         - name: Application Semantic Version
           id: app_sem_ver
-          uses: paulhatch/semantic-version@v5.0.3
-          with:
-            tag_prefix: "v"
-            major_pattern: "BREAKING CHANGES"
-            minor_pattern: "feat"
-            version_format: "${major}.${minor}.${patch}-prerelease${increment}"
-            change_path: "./app"
-            namespace: app
-            bump_each_commit: false
-            search_commit_body: true
-            user_format_type: "csv"
+          run: |
+            . venv/bin/activate
+            cd script
+            pip install -r requirements.txt
+            cd ..
+            python ./script/sem-ver-action.py
+            echo "tag_name=$(git describe --tags --abbrev=0 --match "*-app")" >> $GITHUB_OUTPUT
 
         - name: Prepare App For Release
           uses: thedoctor0/zip-release@0.7.1
           with:
               type: "zip"
-              filename: "App-release-${{ steps.app_sem_ver.outputs.version_tag }}.zip"
+              filename: "App-release-${{ steps.app_sem_ver.outputs.tag_name }}.zip"
               exclusions: "*.git* /*node_modules/* .editorconfig"
               directory: "./app"
               path: "./"
@@ -92,13 +90,13 @@ jobs:
         - name: Upload App Release
           uses: ncipollo/release-action@v1.12.0
           with:
-            artifacts: "*/App-release-${{ steps.app_sem_ver.outputs.version_tag }}.zip"
+            artifacts: "*/App-release-${{ steps.app_sem_ver.outputs.tag_name }}.zip"
             allowUpdates: true
             artifactErrorsFailBuild: true
             commit: main
             generateReleaseNotes: true
             makeLatest: true
-            tag: ${{ steps.app_sem_ver.outputs.version_tag }}
+            tag: ${{ steps.app_sem_ver.outputs.tag_name}}
             token: ${{ secrets.GITHUB_TOKEN }}
           if: ${{ github.ref == 'refs/heads/main' }}
 
