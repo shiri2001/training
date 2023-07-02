@@ -16,13 +16,13 @@ provider "aws" {
 }
 
 module "bastion" {
-  source            = "./bastion-module"
+  source            = "..//modules/bastion-module"
   region            = var.region
   input_personal_ip = var.input_personal_ip
 }
 
 module "add_vm" {
-  source                    = "./vm-module"
+  source                    = "..//modules/vm-module"
   region                    = var.region
   key_name                  = module.bastion.key_name
   private_security_group_id = module.bastion.private_security_group_id
@@ -30,7 +30,7 @@ module "add_vm" {
 }
 
 module "add_vol" {
-  source               = "./add-vol-to-vm-module"
+  source               = "..//modules/add-vol-to-vm-module"
   region               = var.region
   vm_availability_zone = module.add_vm.vm_availability_zone
   vm_id                = module.add_vm.vm_id

@@ -43,6 +43,7 @@ jobs:
         - name: Terraform Init and Plan
           shell: bash
           run: |
+            cd ./basic-bastion-infrastructure
             terraform init
             terraform plan -var input_personal_ip=${{ secrets.INPUT_IP }} -out=${{ github.workspace }}/tfplanoutput/tfplan
 
