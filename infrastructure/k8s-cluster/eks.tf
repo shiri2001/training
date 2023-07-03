@@ -12,7 +12,7 @@ module "eks" {
   cluster_version = "1.21"
   cluster_name    = "api-k8s-cluster"
   vpc_id          = data.aws_vpc.default.id
-  subnets         = module.private_subnet.private_subnet_blocks
+  subnets         = module.add-eks-private-subnet.private_subnet_blocks
 
   enable_irsa = true
 

@@ -16,3 +16,8 @@ variable "node_instance_type" {
   description = "The EC2 instance type"
   default     = "t2.micro"
 }
+
+variable "client_ip" {
+  type        = string
+  description = "Please input your personal ip"
+}

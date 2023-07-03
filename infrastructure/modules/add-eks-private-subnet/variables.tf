@@ -5,9 +5,9 @@ variable "region" {
 }
 
 variable "az" {
-  type        = string
-  description = "the aws availability zone"
-  default     = "us-east-1b"
+  type        = "list"
+  description = "the aws availability zones"
+  default     = ["us-east-1a","us-east-1b"]
 
 }
 
